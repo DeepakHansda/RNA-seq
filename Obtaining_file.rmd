@@ -1,0 +1,9 @@
+First we need to get the data. For this purpose we can extract data from SRA SRP029880 (Kim et al 2016). The objective of this study is to identify a prognostic signature in colorectal cancer (CRC) patients with diverse progression and heterogeneity of CRCs. Authors of this study have tried to identify upregulated genes associated with colorectal cancer (CRC) liver metastasis (CLM). They have conducted 54 Rna-seq samples from 18 CRC patients. For the the purpose of this workflow only 10 samples will be taken (5 metastasized colorectal cancer samples and 5 normal colon samples)
+
+```r
+counts_file <- system.file("extdata/rna-seq/SRP029880.raw_counts.tsv",
+                           package = "compGenomRData")
+coldata_file <- system.file("extdata/rna-seq/SRP029880.colData.tsv",
+                            package = "compGenomRData")
+counts <- as.matrix(read.table(counts_file, header = T, sep = '\t'))
+```
