@@ -39,7 +39,7 @@ rpkm <- apply(subset(counts, select = c(-width)), 2,
 # Computing TPM
 
 # First we need to find the normalized values of read counts normalized by the gene lengths (geneLengths/1000; i.e., # of 
-reads per base kilo base pair)
+# reads per base kilo base pair)
 
 rpk <- apply( subset(counts, select = c(-width)), 2,
               function(x) x/(geneLengths/1000))
@@ -48,6 +48,43 @@ rpk <- apply( subset(counts, select = c(-width)), 2,
 
 tpm <- apply(rpk, 2, function(x) x / sum(as.numeric(x)) * 10^6)
 
+# Now again, as per the definition of tpm, the sample size should add up to a million which indeed is the case.
+
+> colSums(tpm)
+CASE_1 CASE_2 CASE_3 CASE_4 CASE_5 CTRL_1 CTRL_2 CTRL_3 CTRL_4 CTRL_5 
+ 1e+06  1e+06  1e+06  1e+06  1e+06  1e+06  1e+06  1e+06  1e+06  1e+06 
 ```
+
+### Explorartory analysis of read count table
++ clustering
+  
+  It is generally not a good idea to do clustering using all the available genes. It can take lot of time and resources, so instead we do clustering with the help of 100 most variable genes in `tpm` data.
+  
+  ```r
+  # Computing the variance of genes across samples in tpm
+  V <- apply(tpm, 1, var)
+  
+  # sort the V by decreasing order of variance and select top 100 genes.
+  
+  selectedGenes <- names(V[order(V, decreasing = T)][1:100])
+  
+  library(pheatmap)
+  
+  pheatmap(tpm[selectedGenes,], scale = "row", show_rownames = FALSE)
+  ```
+  
+  ![image1](https://user-images.githubusercontent.com/85447250/216706661-1fe21cfc-173e-4c6b-bbb3-1e46766a6154.png)
+  
+  Fig. Clustering and visualization of the topmost variable genes as a heatmap. Columns shows different samples while rows shows 100 topmost variable genes
+  
+  
+
+  
+  
+  
+  
+
+
+
 
 
