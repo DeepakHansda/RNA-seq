@@ -73,7 +73,8 @@ CASE_1 CASE_2 CASE_3 CASE_4 CASE_5 CTRL_1 CTRL_2 CTRL_3 CTRL_4 CTRL_5
   pheatmap(tpm[selectedGenes,], scale = "row", show_rownames = FALSE)
   ```
   
-  ![image1](https://user-images.githubusercontent.com/85447250/216706661-1fe21cfc-173e-4c6b-bbb3-1e46766a6154.png)
+ 
+ ![image1](https://user-images.githubusercontent.com/85447250/216706661-1fe21cfc-173e-4c6b-bbb3-1e46766a6154.png)
   
   Fig. Clustering and visualization of the topmost variable genes as a heatmap. Columns shows different samples while rows shows 100 topmost variable genes.
   
@@ -86,6 +87,8 @@ CASE_1 CASE_2 CASE_3 CASE_4 CASE_5 CTRL_1 CTRL_2 CTRL_3 CTRL_4 CTRL_5
       pheatmap(tpm[selectedGenes,], scale = "row", show_rownames = FALSE, 
          annotation_col = coldata)
  ```
+ 
+ 
  
  ![image2](https://user-images.githubusercontent.com/85447250/216751591-c7ee930e-abef-4032-9cad-eeacdb7fa187.png)
  
