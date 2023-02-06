@@ -184,8 +184,37 @@ DEresults <- DEresults[order(DEresults$pvalue),]
 ```
 
 Above we have obtained a table containing the differential expression status of `case` samples compared to the `control` samples. It is important to note that the sequence of the elements provided in the contrast argument determines which group of samples are to be used as the `control`. This impacts the way the results are interpreted, for instance, if a gene is found up-
-regulated (has a positive log2 fold change), the up-regulation status is only relative to the factor that is provided as `control`. In this case, we used samples from the “CTRL” group as `control` and contrasted the samples from the “CASE” group with respect to the “CTRL” samples. Thus genes with a positive log2 fold change are called up-regulated in the case samples with respect to the `control`, while genes with a negative log2 fold change are down-regulated in the `case` samples. Whether the deregulation is signiﬁcant or not, warrants assessment of the adjusted p-values.
+regulated (has a positive log2 fold change), the up-regulation status is only relative to the factor that is provided as `control`. In this case, we used samples from the “CTRL” group as `control` and contrasted the samples from the “CASE” group with respect to the “CTRL” samples. Thus genes with a positive log2 fold change are called up-regulated in the case samples with respect to the `control`, while genes with a negative log2 fold change are down-regulated in the `case` samples. Whether the deregulation is signiﬁcant or not, warrants assessment of the adjusted p-values. We can have a look at DEresult below.
 
+```r
+> DEresults
+log2 fold change (MLE): group CASE vs CTRL 
+Wald test p-value: group CASE vs CTRL 
+DataFrame with 19097 rows and 6 columns
+            baseMean log2FoldChange     lfcSE       stat       pvalue         padj
+           <numeric>      <numeric> <numeric>  <numeric>    <numeric>    <numeric>
+CYP2E1       4829889        9.36024  0.215223    43.4909  0.00000e+00  0.00000e+00
+FCGBP       10349993       -7.57579  0.186433   -40.6355  0.00000e+00  0.00000e+00
+ASGR2         426422        8.01830  0.216207    37.0863 4.67898e-301 2.87741e-297
+GCKR          100183        7.82841  0.233376    33.5442 1.09479e-246 5.04945e-243
+APOA5         438054       10.20248  0.312503    32.6477 8.64906e-234 3.19133e-230
+...              ...            ...       ...        ...          ...          ...
+CCDC195      20.4981      -0.215607   2.89255 -0.0745386           NA           NA
+SPEM3        23.6370     -22.154765   3.02785 -7.3170030           NA           NA
+AC022167.5   21.8451      -2.056240   2.89545 -0.7101618           NA           NA
+BX276092.9   29.9636       0.407326   2.89048  0.1409199           NA           NA
+ETDC         22.5675      -1.795274   2.89421 -0.6202983           NA           NA
+> 
+```
+
+The ﬁrst three lines in this output show the contrast and the statistical test that were used to compute these results. Below these lines is the actual table with 6 columns:
+
++ **baseMean** represents the average normalized expression of the gene across all considered samples.
++ **log2FoldChange** represents the base-2 logarithm of the fold change of the normalized expression of the gene in the given contrast.
++ **lfcSE** represents the standard error of log2 fold change estimate.
++ **stat** is the statistic calculated in the contrast.
++ **pvalue** represent the pvalue.
++ **padj** represents the pvalue adjusted for multiple testing.
 
 
 
