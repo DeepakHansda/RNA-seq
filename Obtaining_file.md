@@ -261,6 +261,32 @@ DESeq2::plotPCA(rld, ntop = 500, intgroup = 'group') +
 
 Fig. PCA plot of top 500 most variable genes.
 
++ Relative Log Expression plot:
+
+This is a plot that check whether the data in hand is appropriatly normalized or not. Some time data does not get normalized even after applying aforementioned methods. This may be due to some unforseeable factor or variation, like the temparature of the day experiment was carried out, different persons carrying parts of experiments etc. It is quick diagnostic tools which can be applied to both the raw and normalized data to check if the data need further processing.
+
+```r
+library(EDASeq)
+par(mfrow = c(1, 2))
+plotRLE(countData, outline=FALSE, ylim=c(-4, 4),
+        col=as.numeric(colData$group),
+        main = 'Raw Counts')
+plotRLE(DESeq2::counts(dds, normalized = TRUE),
+        outline=FALSE, ylim=c(-4, 4),
+        col = as.numeric(colData$group),
+        main = 'Normalized Counts')
+```
+![image8](https://user-images.githubusercontent.com/85447250/217054806-5d71707e-306e-44bc-ae4a-418a7c84ccb5.png)
+
+Fig. Relative log expression plots based on raw and normalized count matrices.
+
+Here the RLE plot is comprised of boxplots, where each box-plot represents the distribution of the relative log expression of the genes expressed in the corresponding sample. Each gene’s expression is divided by the median expression value of that gene across all samples. Then this is transformed to log scale, which gives the relative log expression value for a single gene. The RLE values for all the genes from a sample are visualized as a boxplot. Ideally the boxplots are centered around the horizontal zero line and are as tightly distributed as possible. From the plots that we have made for the raw and normalized count data, we can observe how the normalized dataset has improved upon the raw count data for all the samples.
+
+
+
+
+
+
 
 
 
