@@ -172,6 +172,22 @@ dds <- dds[rowSums(DESeq2::counts(dds)) > 1,]
 dds <- DESeq(dds)
 ```
 
+Now we can contrast and compare the sample based upon some variable. For instance, we have here "group" variable which describe
+the `case` or `control` label for the samples. 
+
+```r
+DEresults = results(dds, contrast = c("group", "CASE", "CTRL"))
+
+# arranging the result with decreasing order of p.values
+
+DEresults <- DEresults[order(DEresults$pvalue),]
+```
+
+Above we have obtained a table containing the differential expression status of `case` samples compared to the `control` samples. It is important to note that the sequence of the elements provided in the contrast argument determines which group of samples are to be used as the `control`. This impacts the way the results are interpreted, for instance, if a gene is found up-
+regulated (has a positive log2 fold change), the up-regulation status is only relative to the factor that is provided as `control`. In this case, we used samples from the “CTRL” group as `control` and contrasted the samples from the “CASE” group with respect to the “CTRL” samples. Thus genes with a positive log2 fold change are called up-regulated in the case samples with respect to the `control`, while genes with a negative log2 fold change are down-regulated in the `case` samples. Whether the deregulation is signiﬁcant or not, warrants assessment of the adjusted p-values.
+
+
+
 
 
 
