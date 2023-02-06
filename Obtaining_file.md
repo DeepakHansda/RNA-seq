@@ -2,6 +2,12 @@ First we need to get the data. For this purpose we can extract data from SRA SRP
 
 
 ```r
+
+library(pheatmap)
+library(stats)
+library(ggplot2)
+library(ggfortify)
+
 counts_file <- system.file("extdata/rna-seq/SRP029880.raw_counts.tsv",
                            package = "compGenomRData")
 coldata_file <- system.file("extdata/rna-seq/SRP029880.colData.tsv",
@@ -93,6 +99,86 @@ CASE_1 CASE_2 CASE_3 CASE_4 CASE_5 CTRL_1 CTRL_2 CTRL_3 CTRL_4 CTRL_5
  ![image2](https://user-images.githubusercontent.com/85447250/216751591-c7ee930e-abef-4032-9cad-eeacdb7fa187.png)
  
  Fig. Clustering and visualization of the topmost variable genes as a heatmap with annotation.
+ 
+ 
+ + Dimensionality reduction: PCA
+  
+  Apart from heatmap we can also do PCA to confirm if the replicates of a type cluster together. Here too, we should see a clear separation between `CASE` and `CTRL` samples.   
+ 
+ ```r
+ # we need to transpose the count matrix, because that is the way a generic PCA calculation function works
+ M <- t(tpm[selectedGenes,])
+ 
+ # Making sure the the log function does not have to evaluate a $0$
+ 
+M <- log2(M+1)
+
+pcaResults <- prcomp(M)
+
+pca.plot <- autoplot(pcaResults,
+                          data = coldata,
+                          colour = 'group')
+
+pca.plot
+ ```
+![image3](https://user-images.githubusercontent.com/85447250/216831642-37265991-a6d0-433c-9076-52dd1311770c.png)
+
+Fig. PCA plot of CASE and CTRL data using two largest PCs. We can see a clear separation between them.
+
++ Correlation plot
+
+Another similar approach to look for the similarity between replicates is to compute the correlation between samples.
+
+```r
+library(stats)
+
+correlationMatrix <- cor(tpm)
+library(pheatmap)
+pheatmap(correlationMatrix, annotation_col = coldata)
+```
+
+![image4](https://user-images.githubusercontent.com/85447250/216833751-7e383b90-ce01-4fac-9215-4b2701d031d6.png)
+
+Fig. Pairwise correlation of samples displayed as heatmap
+
+
+### Differential gene expression analysis 
+
+Differential gene analysis compares a gene to thousands of other genes with the null hypothesis that the expression level of gene is same in two different samples. 
+
+```r
+
+library(DEseq2)
+# to do a differential expression analysis using 'DESeq2' we need $3$ input objects, the count matrix, metadata of count 
+# matrix, and a design formula
+
+countData <- as.matrix(subset(counts, select = c(-width)))
+
+colData <- read.table(coldata_file, header = TRUE, sep = "\t",
+                      stringsAsFactors = TRUE) 
+designformula <- "~ group"
+
+# Creating a DEseqDataSet object 
+dds <- DESeqDataSetFromMatrix(countData, colData = colData, 
+                              design = as.formula(designformula) )
+
+# we are taking out all such genes which does not have even have total sum of 1 across all samples (10 samples)
+
+dds <- dds[rowSums(DESeq2::counts(dds)) > 1,]
+
+# Now we can use DEseq() function from DESeq2 which will normalize the counts, estimate the dispersion values, and 
+# compute the generalized linear model with the provided design formula. It does return an updated dds object.
+
+dds <- DESeq(dds)
+```
+
+
+
+
+
+
+
+
 
   
   
