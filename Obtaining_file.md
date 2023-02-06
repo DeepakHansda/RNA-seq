@@ -217,6 +217,37 @@ The ﬁrst three lines in this output show the contrast and the statistical test
 + **padj** represents the pvalue adjusted for multiple testing.
 
 
+### Some more diagnostic plots
+
+At this point, before going to further downstream analysis, it is important to look for the quality of our data in hand and to check if that has improved or not.
+
++ MA plot:
+
+An MA plot is a useful tool to check if the data normalization worked well. The MA plot is a scatter plot where the x-axis denotes the average of normalized counts across samples and the y-axis denotes the log fold change in the given
+contrast (here case vs control). Most points are expected to be on the horizontal 0 line (most genes are not expected to be differentially expressed).
+
+```r
+DESeq2::plotMA(object = dds, ylim = c(-5, 5))
+```
+
+![image5](https://user-images.githubusercontent.com/85447250/216890585-78fc1103-8854-46c5-b060-1575bf820b96.png)
+
+Fig. MA plot of differential expression results.
+
++ p-value distribution
+
+It is also important to observe the distribution of raw p-values (Figure 8.7). We expect to see a peak around low p-values and a uniform distribution at P-values above 0.1. Otherwise, adjustment for multiple testing would not work and the results
+are not meaningful.
+
+```r
+ggplot(data = as.data.frame(DEresults), aes(x = pvalue)) +
+  geom_histogram(bins = 100)
+```
+
+![image6](https://user-images.githubusercontent.com/85447250/216891706-db24f9b4-a9d8-4509-bcf7-77af4d14c1dc.png)
+
+Fig. P-value distribution genes before adjusting for multiple testing
+
 
 
 
