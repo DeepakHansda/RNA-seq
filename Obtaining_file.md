@@ -248,6 +248,25 @@ ggplot(data = as.data.frame(DEresults), aes(x = pvalue)) +
 
 Fig. P-value distribution genes before adjusting for multiple testing
 
++ PCA plot
+
+Another important diagnostic plot to look for the reproducibility of sample replicates is to plot the PCA for the data.
+
+```r
+rld <- rlog(dds)
+DESeq2::plotPCA(rld, ntop = 500, intgroup = 'group') +
+  ylim(-50, 50) + theme_bw()
+```
+![image7](https://user-images.githubusercontent.com/85447250/217051810-0bd43455-068c-473e-a1f5-5d6a73af1c21.png)
+
+Fig. PCA plot of top 500 most variable genes.
+
+
+
+
+
+
+
 
 
 
