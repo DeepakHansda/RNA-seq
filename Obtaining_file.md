@@ -283,6 +283,14 @@ Fig. Relative log expression plots based on raw and normalized count matrices.
 Here the RLE plot is comprised of boxplots, where each box-plot represents the distribution of the relative log expression of the genes expressed in the corresponding sample. Each gene’s expression is divided by the median expression value of that gene across all samples. Then this is transformed to log scale, which gives the relative log expression value for a single gene. The RLE values for all the genes from a sample are visualized as a boxplot. Ideally the boxplots are centered around the horizontal zero line and are as tightly distributed as possible. From the plots that we have made for the raw and normalized count data, we can observe how the normalized dataset has improved upon the raw count data for all the samples.
 
 
+### Functional enrichment analysis
+
+
+
+# extract differential expression results
+DEresults <- results(dds, contrast = c('group', 'CASE', 'CTRL'))
+
+
 
 
 
