@@ -285,14 +285,53 @@ Here the RLE plot is comprised of boxplots, where each box-plot represents the d
 
 ### Functional enrichment analysis
 
+ We will use `gost` from **gprofiler2** package to do gene set enrichment analysis. 
+
+```r
+go_term_results <- gost(query = genesOfInterest,
+                        organism = "hsapiens",
+                        ordered_query = FALSE, 
+                        multi_query = FALSE, significant = TRUE,
+                        exclude_iea = FALSE, 
+                        measure_underrepresentation = FALSE, 
+                        evcodes = FALSE, 
+                        user_threshold = 0.05, 
+                        correction_method = "g_SCS", 
+                        domain_scope = "annotated", custom_bg = NULL, 
+                        numeric_ns = "", sources = NULL, as_short_link = FALSE)
+                        
+ # gost() produces a named list; the list includes a data.frame (result) and a metadata object (meta)
+ 
+ > names(go_term_results)
+[1] "result" "meta" 
+
+> dim(go_term_results$result)
+[1] 1688   14
+
+head(go_term_results$result,3)
+    query significant       p_value term_size query_size intersection_size
+1 query_1        TRUE  1.471339e-03         6        526                 6
+2 query_1        TRUE  4.991540e-02         6        526                 5
+3 query_1        TRUE 9.576567e-111      7463       3790              1957
+    precision    recall    term_id source
+1 0.011406844 1.0000000 CORUM:7268  CORUM
+2 0.009505703 0.8333333 CORUM:7265  CORUM
+3 0.516358839 0.2622270 GO:0032501  GO:BP
+                                              term_name effective_domain_size
+1    HEPACAM-MLC1-Na,K-ATPase-Kir4.1-AQP4-TRPV4 complex                  3385
+2 MLC1-Na,K-ATPase-Kir4.1-AQP4-TRPV4-syntrophin complex                  3385
+3                      multicellular organismal process                 21092
+  source_order       parents
+1         2733 CORUM:0000000
+2         2730 CORUM:0000000
+3         8794    GO:0008150
+
+```
+ 
 
 
-# extract differential expression results
-DEresults <- results(dds, contrast = c('group', 'CASE', 'CTRL'))
 
-
-
-
+ 
 
 
 
