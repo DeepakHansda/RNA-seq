@@ -288,7 +288,7 @@ Here the RLE plot is comprised of boxplots, where each box-plot represents the d
  We will use `gost` from **gprofiler2** package to do gene set enrichment analysis. 
 
 ```r
-go_term_results <- gost(query = genesOfInterest,
+term_results <- gost(query = genesOfInterest,
                         organism = "hsapiens",
                         ordered_query = FALSE, 
                         multi_query = FALSE, significant = TRUE,
@@ -302,13 +302,13 @@ go_term_results <- gost(query = genesOfInterest,
                         
  # gost() produces a named list; the list includes a data.frame (result) and a metadata object (meta)
  
- > names(go_term_results)
+ > names(term_results)
 [1] "result" "meta" 
 
-> dim(go_term_results$result)
+> dim(term_results$result)
 [1] 1688   14
 
-> head(go_term_results$result,3)
+> head(term_results$result,3)
     query significant       p_value term_size query_size intersection_size
 1 query_1        TRUE  1.471339e-03         6        526                 6
 2 query_1        TRUE  4.991540e-02         6        526                 5
@@ -328,12 +328,36 @@ go_term_results <- gost(query = genesOfInterest,
 
 ```
 
+Once we are done with the gene set enrichment analysis, we can visualize what GO, REAC, KEGG are enriched in our gene sets.
 
- 
+```r
+plot_object <- gostplot(term_results, capped = TRUE, interactive = TRUE)
 
+plot_obj_table <- publish_gostplot(plot_object, highlight_terms = c("GO:0015850", 
+                                                        "REAC:R-HSA-1474244",
+                                                        "KEGG:04080"), 
+                       width = NA, height = NA, filename = NULL )
+plot_obj_table
 
+```
+![image9](https://user-images.githubusercontent.com/85447250/217650364-f34224e0-aa58-405e-a2ac-e0ed73cc9d31.png)
 
- 
+Fig. GSEA analysis showing some enriched GO, KEGG, and REAC pathways
+
+We can also get the enriched terms in our data sets as a table .
+
+```r
+publish_gosttable(go_term_results, highlight_terms = go_term_results$result[c(1:10),],
+                  use_colors = TRUE, 
+                  show_columns = c("source", "term_name", "term_size", "intersection_size"),
+                  filename = NULL)
+                  
+```
+
+![image10](https://user-images.githubusercontent.com/85447250/217652867-c17e505c-aebb-4d16-a2c1-9a82e2cbce5b.png)
+
+Fig. Table of enriched terms. For representation purpose only first ten are being shown here.
+
 
 
 
