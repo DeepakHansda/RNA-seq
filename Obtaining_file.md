@@ -308,7 +308,7 @@ go_term_results <- gost(query = genesOfInterest,
 > dim(go_term_results$result)
 [1] 1688   14
 
-head(go_term_results$result,3)
+> head(go_term_results$result,3)
     query significant       p_value term_size query_size intersection_size
 1 query_1        TRUE  1.471339e-03         6        526                 6
 2 query_1        TRUE  4.991540e-02         6        526                 5
@@ -327,6 +327,8 @@ head(go_term_results$result,3)
 3         8794    GO:0008150
 
 ```
+
+
  
 
 
