@@ -81,7 +81,7 @@ terms_all <- gost(query = genesOfInterest,
 
 ![image14](https://user-images.githubusercontent.com/85447250/217913585-4f1094e9-ecc2-469f-8ed7-a859bfbc6463.png)
 
-Fig. Annotations from different sources. Particularly, three from GO, KEGG, and REAC has been dipicted.
+Fig. Annotations from different sources. Particularly, three from GO, KEGG, and REAC has been shown.
 
 
 
