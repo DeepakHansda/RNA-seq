@@ -52,11 +52,37 @@ publish_gosttable(go_terms,
 
 Fig. Table showing top 10 Go terms based on the p.values.
 
-We also can help ourselves with some Manhattan style plot for the different kinds of annotations we can obtain with **gProfiler2** package. We can take full advantage of this package to find annotations from all other avilable sources such as KEGG, REAC, CORUM etc.
+We also can help ourselves with some Manhattan style plot for the different kinds of annotations we can obtain with **gprofiler2** package. We can take full advantage of this package to find annotations from all other avilable sources such as KEGG, REAC, CORUM etc.
 
 ```r
+# first we obtain annotations from all sources by setting sources=NULL in gost()
+terms_all <- gost(query = genesOfInterest,
+                 organism = "hsapiens",
+                 ordered_query = FALSE, 
+                 multi_query = FALSE, significant = TRUE,
+                 exclude_iea = FALSE, 
+                 measure_underrepresentation = FALSE, 
+                 evcodes = FALSE, 
+                 user_threshold = 0.05, 
+                 correction_method = "g_SCS", 
+                 domain_scope = "annotated", custom_bg = NULL, 
+                 numeric_ns = "", sources = NULL, as_short_link = FALSE
+)
+
+> plot_object_static <- gostplot(terms_all, capped = TRUE, interactive = F)
+
+
+> plot_obj_table <- publish_gostplot(plot_object_static, highlight_terms = c("GO:0015850", "REAC:R-HSA-1474244", "KEGG:04080"),
+                                                                 width = NA, height = NA, filename = NA)
+
+> plot_obj_table
 
 ```
+
+![image14](https://user-images.githubusercontent.com/85447250/217913585-4f1094e9-ecc2-469f-8ed7-a859bfbc6463.png)
+
+Fig. Annotations from different sources. Particularly, three from GO, KEGG, and REAC has been dipicted.
+
 
 
 
