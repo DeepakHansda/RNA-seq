@@ -353,9 +353,12 @@ publish_gosttable(term_results, highlight_terms = head(term_results$result[order
                   filename = NULL)
                   
 ```
+
 ![image11](https://user-images.githubusercontent.com/85447250/217881068-180c7be1-37f0-472f-9cf4-b58f4149e751.png)
 
 Fig. Table of enriched terms. For representation purpose only top ten are being shown here.
+
+
 
 
 
