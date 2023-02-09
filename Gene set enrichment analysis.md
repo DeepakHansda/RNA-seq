@@ -13,7 +13,50 @@ DE <- DE[DE$padj < 0.1,]
 # Extracting all the genes having a log fold change > 2
 DE <- DE[abs(DE$log2FoldChange) > 1,]
 
+# getting the set of genes 
+genesOfInterest <- rownames(DE)
+
+# we have 4367 DE genes
+> length(genesOfInterest)
+[1] 4367
+
+library(DESeq2)
+library(gprofiler2)
+library(ggfortify)
+
+# calculate enriched GO terms
+
+go_terms <- gost(query = genesOfInterest,
+                        organism = "hsapiens",
+                        ordered_query = FALSE, 
+                        multi_query = FALSE, significant = TRUE,
+                        exclude_iea = FALSE, 
+                        measure_underrepresentation = FALSE, 
+                        evcodes = FALSE, 
+                        user_threshold = 0.05, 
+                        correction_method = "g_SCS", 
+                        domain_scope = "annotated", custom_bg = NULL, 
+                        numeric_ns = "", sources = 'GO', as_short_link = FALSE
+                        )
+
+
+
+publish_gosttable(go_terms, 
+                  highlight_terms = head(go_terms$result[order(go_terms$result$p_value),],10),
+                  use_colors = TRUE, 
+                  show_columns = c("source", "term_name", "term_size", "intersection_size"),
+                  filename = NULL)
 
 ```
+![image12](https://user-images.githubusercontent.com/85447250/217903209-00037714-95cd-4ff6-bd6b-7dcf5d54803e.png)
+
+Fig. Table showing top 10 Go terms based on the p.values.
+
+We also can help ourselves with some Manhattan style plot for the different kinds of annotations we can obtain with **gProfiler2** package. We can take full advantage of this package to find annotations from all other avilable sources such as KEGG, REAC, CORUM etc.
+
+```r
+
+```
+
 
 
