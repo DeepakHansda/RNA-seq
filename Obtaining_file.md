@@ -344,19 +344,20 @@ plot_obj_table
 
 Fig. GSEA analysis showing some enriched GO, KEGG, and REAC pathways
 
-We can also get the enriched terms in our data sets as a table .
+We can also get the enriched terms in our data sets as a table. Table below shows top ten terms based on p.values
 
 ```r
-publish_gosttable(go_term_results, highlight_terms = go_term_results$result[c(1:10),],
+publish_gosttable(term_results, highlight_terms = head(term_results$result[order(term_results$result$p_value),],10),
                   use_colors = TRUE, 
                   show_columns = c("source", "term_name", "term_size", "intersection_size"),
                   filename = NULL)
                   
 ```
+![image11](https://user-images.githubusercontent.com/85447250/217881068-180c7be1-37f0-472f-9cf4-b58f4149e751.png)
 
-![image10](https://user-images.githubusercontent.com/85447250/217652867-c17e505c-aebb-4d16-a2c1-9a82e2cbce5b.png)
+Fig. Table of enriched terms. For representation purpose only top ten are being shown here.
 
-Fig. Table of enriched terms. For representation purpose only first ten are being shown here.
+
 
 
 
