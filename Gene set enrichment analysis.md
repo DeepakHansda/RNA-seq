@@ -147,5 +147,6 @@ pheatmap(log2(M+1),
 
 Fig. Heatmap of expression value from the genes with the top GO term. 
 
+We can see that almost all genes from this gene set display an increased level of expression in the case samples compared to the controls.
 
 
