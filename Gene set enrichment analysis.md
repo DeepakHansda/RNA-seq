@@ -84,5 +84,68 @@ terms_all <- gost(query = genesOfInterest,
 Fig. Annotations from different sources. Particularly, three from GO, KEGG, and REAC has been shown.
 
 
+A similar aspect of GSEA is to do an enrichment analysis of a well defined gene sets (for example it may be subset of genes from count matrix with highest variations; and a gene set created with random sampling)  in CASE and CTRL and check if the well defined gene set is clearly enriched in CASE vs CTRL study as compared to the gene set created with random sampling. What essentially we are going to do is take two gene sets (as defined above) and do a group comparison between the case
+samples with respect to the control samples (some thing like asking a question; is the well defined set of genes is clearly upregulated or downregulated when we look for the expression values in CASE vs CTRL samples? is the random set of genes shows any difference in expression values in CASE vs CTRL samples). We do it with the help of **gage** package.
+
+We begin by getting those two sets of genes; 1) known genes set: we extract it from top GO terms from previous analysis (`go_terms`). 2) a gene set from random sampling of genes
+
+```r
+library(gage)
+
+#significant GO terms found in the GO analysis. order go results by p.value
+sig_go_terms <- go_terms$result[order(go_terms$result$p_value),]
+
+#restrict the terms that have at most 100 genes overlapping with the query
+go_top <- sig_go_terms[sig_go_terms$intersection_size < 100,]
+
+go_top <- go_top[order(go_top$intersection),]
+
+#use the top term from this table to create a gene set
+geneSet1 <- unlist(strsplit(go_top[1,]$intersection, ','))
+
+#define another gene set by just randomly selecting 25 genes from the counts tables
+normalizedCounts <- DESeq2::counts(dds, normalized = TRUE)
+geneSet2 <- sample(rownames(normalizedCounts), 25)
+
+# a list of two gene sets
+geneSets <- list('top_GO_term' = geneSet1,
+                 'random_set' = geneSet2)
+
+
+gseaResults <- gage(exprs = log2(normalizedCounts+1),
+                    ref = match(rownames(colData[colData$group == 'CTRL',]),
+                                colnames(normalizedCounts)),
+                    samp = match(rownames(colData[colData$group == 'CASE',]),
+                                 colnames(normalizedCounts)),
+                    gsets = geneSets, compare = 'as.group')
+                    
+> gseaResults$greater
+               p.geomean stat.mean        p.val        q.val set.size         exp1
+top_GO_term 1.835290e-07 5.8490273 1.835290e-07 3.670581e-07       31 1.835290e-07
+random_set  2.494493e-01 0.6821332 2.494493e-01 2.494493e-01       25 2.494493e-01
+
+> gseaResults$less
+            p.geomean stat.mean     p.val     q.val set.size      exp1
+random_set  0.7505507 0.6821332 0.7505507 0.9999998       25 0.7505507
+top_GO_term 0.9999998 5.8490273 0.9999998 0.9999998       31 0.9999998
+```
+We can see that the random gene set shows no signiﬁcant up- or down-regulation, while the gene set we deﬁned using the top GO term shows a signiﬁcant up-regulation (adjusted p-value < 1.835290e-07). At this point it is worthwhile to visualize these systematic changes in a heatmap.
+
+```r
+# get the expression data for the gene set of interest
+M <- normalizedCounts[rownames(normalizedCounts) %in% geneSet1, ]
+
+pheatmap(log2(M+1),
+         annotation_col = colData,
+         show_rownames = TRUE,
+         fontsize_row = 8,
+         scale = 'row',
+         cutree_cols = 2,
+         cutree_rows = 2)
+```
+![image15](https://user-images.githubusercontent.com/85447250/218023331-a51c3040-20b3-43c8-846e-b5c876070612.png)
+
+Fig. Heatmap of expression value from the genes with the top GO term. 
+
 
 
